@@ -1,1 +1,58 @@
-<p>home works!</p>
+<section class="home">
+  <div class="container home__content">
+
+    <div class="home__hero">
+
+      <h1 class="home__title text-center">
+        Bienvenido al centro de gestión de
+        <span>Super Héroes</span>
+      </h1>
+
+      <p class="home__description">
+        Administrá tu equipo de héroes desde un único lugar.
+        Consultá sus habilidades, actualizá su información
+        y registrá nuevos integrantes cuando aparezcan.
+      </p>
+
+      <div class="home__actions">
+        <app-button (clicked)="onViewAll()" variant="primary"> Ver Superhéroes</app-button>
+        <app-button (clicked)="onCreateHero()" variant="outline"> Registrar héroe</app-button>
+      </div>
+    </div>
+
+    <div class="home__features">
+
+      <article class="home-card">
+
+        <h2>Explorá tus héroes</h2>
+
+        <p>
+          Consultá todos los superhéroes registrados y conocé
+          sus poderes, debilidades y principales enemigos.
+        </p>
+      </article>
+
+      <article class="home-card">
+
+        <h2>Actualizá sus poderes</h2>
+
+        <p>
+          ¿Tu héroe cambió o descubrió una nueva habilidad?
+          Actualizá su información para mantener su perfil al día.
+        </p>
+      </article>
+
+      <article class="home-card">
+
+        <h2>Registrá nuevos héroes</h2>
+
+        <p>
+          ¿Surgió un nuevo héroe? No hay problema.
+          Registralo y agregalo inmediatamente a tu equipo.
+        </p>
+      </article>
+
+    </div>
+
+  </div>
+</section>

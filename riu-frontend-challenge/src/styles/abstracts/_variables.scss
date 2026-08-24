@@ -1,0 +1,158 @@
+// ==============================
+// BRAND - HERO THEME
+// ==============================
+
+$color-primary: #1d4ed8;
+$color-primary-hover: #1e40af;
+$color-primary-active: #1e3a8a;
+$color-primary-subtle: #dbeafe;
+
+$color-accent: #dc2626;
+$color-accent-hover: #b91c1c;
+$color-accent-active: #991b1b;
+$color-accent-subtle: #fee2e2;
+
+// Highlight / comic detail
+$color-highlight: #fbbf24;
+$color-highlight-hover: #f59e0b;
+$color-highlight-subtle: #fef3c7;
+
+// ==============================
+// BACKGROUNDS
+// ==============================
+
+$color-background: #f4f6fb;
+$color-surface: #ffffff;
+$color-surface-light: #eef2ff;
+$color-surface-hover: #e0e7ff;
+$color-surface-selected: #dbeafe;
+
+// ==============================
+// TEXT
+// ==============================
+
+$color-text: #111827;
+$color-text-muted: #64748b;
+$color-text-disabled: #9ca3af;
+$color-text-inverse: #ffffff;
+
+// ==============================
+// BORDERS
+// ==============================
+
+$color-border: #cbd5e1;
+$color-border-subtle: #e2e8f0;
+$color-border-strong: #94a3b8;
+$color-border-focus: #2563eb;
+
+// ==============================
+// STATES
+// ==============================
+
+$color-focus-ring: rgba(37, 99, 235, 0.3);
+
+$color-overlay: rgba(15, 23, 42, 0.65);
+
+$color-disabled-background: #f1f5f9;
+$color-disabled-border: #d8dee8;
+// ==============================
+// SEMANTIC COLORS
+// ==============================
+
+// SUCCESS
+$color-success: #18794e;
+$color-success-hover: #12663f;
+$color-success-active: #0d5233;
+$color-success-subtle: #dff4e8;
+
+// WARNING
+$color-warning: #a15c00;
+$color-warning-hover: #874d00;
+$color-warning-active: #6d3e00;
+$color-warning-subtle: #fff0cc;
+
+// ERROR
+$color-error: #b42318;
+$color-error-hover: #971d14;
+$color-error-active: #7a1710;
+$color-error-subtle: #fee4e2;
+
+// INFO
+$color-info: #175cd3;
+$color-info-hover: #144fb4;
+$color-info-active: #103f91;
+$color-info-subtle: #e3efff;
+
+// ==============================
+// TYPOGRAPHY
+// ==============================
+
+$font-family-base: Arial, Helvetica, sans-serif;
+
+$font-size-sm: 0.875rem;
+$font-size-base: 1rem;
+$font-size-md: 1.125rem;
+$font-size-lg: 1.5rem;
+$font-size-xl: 2rem;
+
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-bold: 700;
+
+$line-height-base: 1.5;
+
+// ==============================
+// SPACING
+// ==============================
+
+$spacing-xs: 0.25rem;
+$spacing-sm: 0.5rem;
+$spacing-md: 1rem;
+$spacing-lg: 1.5rem;
+$spacing-xl: 2rem;
+$spacing-2xl: 3rem;
+
+// ==============================
+// BORDERS
+// ==============================
+
+$border-width: 1px;
+
+$radius-sm: 0.25rem;
+$radius-md: 0.5rem;
+$radius-lg: 1rem;
+$radius-full: 9999px;
+
+// ==============================
+// SHADOWS
+// ==============================
+
+$shadow-sm: 0 2px 4px rgb(0 0 0 / 20%);
+$shadow-md: 0 4px 12px rgb(0 0 0 / 30%);
+$shadow-lg: 0 8px 24px rgb(0 0 0 / 40%);
+
+// ==============================
+// BREAKPOINTS
+// ==============================
+
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;
+
+// ==============================
+// TRANSITIONS
+// ==============================
+
+$transition-fast: 150ms ease;
+$transition-base: 250ms ease;
+
+// ==============================
+// Z-INDEX
+// ==============================
+
+$z-index-dropdown: 100;
+$z-index-header: 500;
+$z-index-overlay: 900;
+$z-index-modal: 1000;
+$z-index-toast: 1100;

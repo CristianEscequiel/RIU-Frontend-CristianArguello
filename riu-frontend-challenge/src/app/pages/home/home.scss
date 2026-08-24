@@ -1,0 +1,133 @@
+@use '../../../styles/abstracts/' as a;
+
+.home {
+  min-height: 100dvh;
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0;
+
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      a.$color-primary-subtle,
+      transparent 45%
+    ),
+    a.$color-background;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: a.$spacing-2xl;
+  }
+
+  &__hero {
+    max-width: 800px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    text-align: center;
+  }
+
+  &__title {
+    margin: 0;
+
+    color: a.$color-text;
+
+    font-size: clamp(2.25rem, 5vw, 4rem);
+    line-height: 1.05;
+
+    span {
+      color: a.$color-primary;
+    }
+  }
+
+  &__description {
+    max-width: 650px;
+
+    margin: a.$spacing-lg 0 0;
+
+    color: a.$color-text-muted;
+
+    font-size: a.$font-size-md;
+    line-height: a.$line-height-base;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: a.$spacing-md;
+
+    margin-top: a.$spacing-xl;
+  }
+
+  &__features {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: a.$spacing-lg;
+  }
+}
+
+.home-card {
+  padding: a.$spacing-md;
+
+  background-color: a.$color-surface;
+
+  border: a.$border-width solid a.$color-border-subtle;
+  border-radius: a.$radius-lg;
+
+  transition:
+    transform a.$transition-fast,
+    border-color a.$transition-fast,
+    box-shadow a.$transition-fast;
+
+  &:hover {
+    transform: translateY(-4px);
+
+    border-color: a.$color-primary;
+
+    box-shadow: a.$shadow-md;
+  }
+
+  }
+
+  h2 {
+    margin: 0 0 a.$spacing-sm;
+
+    color: a.$color-text;
+
+    font-size: a.$font-size-md;
+    font-weight: a.$font-weight-bold;
+  }
+
+  p {
+    margin: 0;
+
+    color: a.$color-text-muted;
+
+    font-size: a.$font-size-base;
+    line-height: a.$line-height-base;
+  }
+
+
+@media (max-width: a.$breakpoint-md) {
+  .home {
+    padding: a.$spacing-xl 0;
+
+    &__features {
+      grid-template-columns: 1fr;
+    }
+
+    &__description {
+      font-size: a.$font-size-base;
+    }
+  }
+}
