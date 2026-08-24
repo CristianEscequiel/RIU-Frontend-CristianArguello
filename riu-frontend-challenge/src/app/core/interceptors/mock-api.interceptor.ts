@@ -7,6 +7,7 @@ import { Hero , HeroCreateRequest } from '../../features/heroes/models/hero.mode
 const API_DELAY = 800;
 
 export const mockApiInterceptor: HttpInterceptorFn = (request, next) => {
+
   if (!request.url.startsWith('/api/heroes')) {
     return next(request);
   }
@@ -24,9 +25,9 @@ export const mockApiInterceptor: HttpInterceptorFn = (request, next) => {
 
   if (request.method === 'GET' && detailMatch) {
     const id = Number(detailMatch[1]);
-    const Hero = HERO_MOCK.find((item) => item.id === id);
+    const hero = HERO_MOCK.find((item) => item.id === id);
 
-    if (!Hero) {
+    if (!hero) {
       return throwError(
         () =>
           new HttpErrorResponse({
@@ -42,7 +43,7 @@ export const mockApiInterceptor: HttpInterceptorFn = (request, next) => {
     return of(
       new HttpResponse({
         status: 200,
-        body: Hero,
+        body: hero,
       }),
     ).pipe(delay(API_DELAY));
   }
@@ -99,7 +100,7 @@ export const mockApiInterceptor: HttpInterceptorFn = (request, next) => {
             status: 400,
             statusText: 'Bad Request',
             error: {
-              message: `Solicitud inválida para la orden ${id}`,
+              message: `Solicitud inválida para el id: ${id}`,
             },
           }),
       );
@@ -126,7 +127,7 @@ export const mockApiInterceptor: HttpInterceptorFn = (request, next) => {
             status: 404,
             statusText: 'Not Found',
             error: {
-              message: `No se encontró la orden ${id}`,
+              message: `No se encontró el id: ${id}`,
             },
           }),
       );
