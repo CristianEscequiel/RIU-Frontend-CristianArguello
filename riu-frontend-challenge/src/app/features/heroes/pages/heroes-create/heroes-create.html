@@ -1,1 +1,9 @@
-<p>heroes-create works!</p>
+<section class="container">
+  <div class="d-flex justify-between py-lg">
+    <h1>Crea tu Heroe</h1>
+    <app-button variant="primary" (clicked)="navigateToWorkOrdersList()">
+      Volver a Lista de Superheroes
+    </app-button>
+  </div>
+  <app-heroes-form (sendData)="onSubmit($event)"></app-heroes-form>
+</section>

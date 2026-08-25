@@ -1,1 +1,11 @@
-<p>heroes-edit works!</p>
+<section class="container">
+  <div class="d-flex justify-between py-lg">
+    <h1>Editar Superheroe</h1>
+    <app-button variant="primary" (clicked)="navigateToHeroesList()">
+      Volver a Lista de Superheroes
+    </app-button>
+  </div>
+  @if (heroe(); as heroe) {
+  <app-heroes-form mode="edit" [inputData]="heroe" (sendData)="onSubmitEdit($event)" />
+  }
+</section>

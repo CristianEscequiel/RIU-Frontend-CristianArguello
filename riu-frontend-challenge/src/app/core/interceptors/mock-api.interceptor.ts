@@ -2,7 +2,7 @@ import { HttpErrorResponse, HttpInterceptorFn, HttpResponse } from '@angular/com
 import { delay, of, throwError } from 'rxjs';
 
 import { HERO_MOCK } from '../../features/heroes/data-access/heroes.mock';
-import { Hero , HeroCreateRequest } from '../../features/heroes/models/hero.model';
+import { Hero, HeroCreateRequest } from '../../features/heroes/models/hero.model';
 
 const API_DELAY = 800;
 
@@ -13,11 +13,19 @@ export const mockApiInterceptor: HttpInterceptorFn = (request, next) => {
   }
 
   if (request.method === 'GET' && request.url === '/api/heroes') {
+    if (!localStorage.getItem('heroes')) {
+      localStorage.setItem('heroes', JSON.stringify(HERO_MOCK));
+    }
+
+    const heroes: Hero[] = JSON.parse(
+      localStorage.getItem('heroes') ?? '[]'
+    );
+
     return of(
       new HttpResponse({
         status: 200,
-        body: HERO_MOCK,
-      }),
+        body: heroes,
+      })
     ).pipe(delay(API_DELAY));
   }
 
@@ -25,7 +33,10 @@ export const mockApiInterceptor: HttpInterceptorFn = (request, next) => {
 
   if (request.method === 'GET' && detailMatch) {
     const id = Number(detailMatch[1]);
-    const hero = HERO_MOCK.find((item) => item.id === id);
+    const heroes: Hero[] = JSON.parse(
+      localStorage.getItem('heroes') ?? '[]'
+    );
+    const hero = heroes.find((item) => item.id === id);
 
     if (!hero) {
       return throwError(
@@ -39,7 +50,6 @@ export const mockApiInterceptor: HttpInterceptorFn = (request, next) => {
           }),
       );
     }
-
     return of(
       new HttpResponse({
         status: 200,
@@ -67,8 +77,12 @@ export const mockApiInterceptor: HttpInterceptorFn = (request, next) => {
       ...body,
       id: HERO_MOCK.length + 1,
     };
+    const heroes: Hero[] = JSON.parse(
+      localStorage.getItem('heroes') ?? '[]'
+    );
 
-    HERO_MOCK.push(newWorkOrder);
+    heroes.push(newWorkOrder);
+    localStorage.setItem('heroes', JSON.stringify(heroes))
     return of(
       new HttpResponse({
         status: 201,
@@ -79,7 +93,10 @@ export const mockApiInterceptor: HttpInterceptorFn = (request, next) => {
 
   if (request.method === 'PUT' && detailMatch) {
     const id = Number(detailMatch[1]);
-    const index = HERO_MOCK.findIndex((item) => item.id === id);
+    const heroes: Hero[] = JSON.parse(
+      localStorage.getItem('heroes') ?? '[]'
+    );
+    const index = heroes.findIndex((item) => item.id === id);
 
     if (index === -1) {
       return throwError(
@@ -105,20 +122,25 @@ export const mockApiInterceptor: HttpInterceptorFn = (request, next) => {
           }),
       );
     }
-    const updatedHero: Hero = { ...HERO_MOCK[index], ...request.body };
-    HERO_MOCK[index] = updatedHero;
+    const updatedHero: Hero = { ...heroes[index], ...request.body };
+
+    heroes[index] = updatedHero;
+    localStorage.setItem('heroes', JSON.stringify(heroes))
 
     return of(
       new HttpResponse({
         status: 200,
-        body: HERO_MOCK[index],
+        body: heroes[index],
       }),
     ).pipe(delay(API_DELAY));
   }
 
   if (request.method === 'DELETE' && detailMatch) {
     const id = Number(detailMatch[1]);
-    const index = HERO_MOCK.findIndex((item) => item.id === id);
+    const heroes: Hero[] = JSON.parse(
+      localStorage.getItem('heroes') ?? '[]'
+    );
+    const index = heroes.findIndex((item) => item.id === id);
 
     if (index === -1) {
       return throwError(
@@ -132,8 +154,8 @@ export const mockApiInterceptor: HttpInterceptorFn = (request, next) => {
           }),
       );
     }
-
-    HERO_MOCK.splice(index, 1);
+    heroes.splice(index, 1);
+    localStorage.setItem('heroes', JSON.stringify(heroes))
 
     return of(
       new HttpResponse({
