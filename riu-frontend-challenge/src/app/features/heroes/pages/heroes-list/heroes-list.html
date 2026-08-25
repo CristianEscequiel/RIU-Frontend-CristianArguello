@@ -1,7 +1,7 @@
 <section class="container text-center">
   <div class="d-flex justify-between py-lg">
     <input class="form-control ml-lg" type="search" [formControl]="searchControl" placeholder="Buscar superheroe"
-            aria-label="Buscar superheroe por nombre" />
+      aria-label="Buscar superheroe por nombre" />
     <span class="mx-lg"></span>
     <app-button variant="primary" (clicked)="navigateToCreateHeroe()">
       Crear Superheroe
@@ -15,7 +15,9 @@
   </app-button>
 
   } @else if (heroes().length === 0) {
-  <app-alert title="Sin Superheroes" message="No existen superheroes registrados." variant="info" />
+  <app-alert title="Sin Superheroes"
+    message="El superheroe que busca no se encuentra registrado. ¡O peor aún! No hay super heroes en este mundo! "
+    variant="info" />
   } @else {
 
   <table class="table">
@@ -29,7 +31,7 @@
       </tr>
     </thead>
     <tbody>
-      @for (heroes of heroes(); track heroes.id) {
+      @for (heroes of paginatedHeroes(); track heroes.id) {
       <tr class="table__row table__row--clickable">
         <td>{{ heroes.name }}</td>
         <td>{{ heroes.superpower }}</td>
@@ -50,6 +52,26 @@
       }
     </tbody>
   </table>
+
+  <nav class="pagination mt-lg" aria-label="Paginación de ejemplo">
+    <button class="pagination__item" type="button" aria-label="Página anterior" [disabled]="currentPage() === 1"
+      (click)="goToPage(currentPage() - 1)">
+      ‹
+    </button>
+
+    @for (page of pages(); track page) {
+    <button class="pagination__item" [class.pagination__item--active]="currentPage() === page" type="button"
+      [attr.aria-current]="currentPage() === page ? 'page' : null" [attr.aria-label]="'Ir a la página ' + page"
+      (click)="goToPage(page)">
+      {{ page }}
+    </button>
+    }
+
+    <button class="pagination__item" type="button" aria-label="Página siguiente"
+      [disabled]="currentPage() === pages().length" (click)="goToPage(currentPage() + 1)">
+      ›
+    </button>
+  </nav>
   }
   <app-modal [(isOpen)]="deleteModalOpen" title="Eliminar superheroe"
     message="¿Estás seguro de que querés eliminar este Superheroe? Esta acción no se puede deshacer."

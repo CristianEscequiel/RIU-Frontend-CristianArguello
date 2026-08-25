@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { HeroesService } from '../../data-access/heroes.service';
 import { MessageService } from '../../../../core/services/message.service';
 import { Router } from '@angular/router';
@@ -12,12 +12,12 @@ import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-heroes-list',
-  imports: [Button , Modal , Alert , ReactiveFormsModule],
+  imports: [Button, Modal, Alert, ReactiveFormsModule],
   templateUrl: './heroes-list.html',
   styleUrl: './heroes-list.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HeroesList implements OnInit{
+export class HeroesList implements OnInit {
   private readonly destroyRef = inject(DestroyRef)
   private readonly route = inject(Router);
   private readonly heroesService = inject(HeroesService);
@@ -27,22 +27,41 @@ export class HeroesList implements OnInit{
   readonly isModalOpen = signal<boolean>(false)
   readonly searchControl = new FormControl('', { nonNullable: true });
   idHeroeDelete = signal<number>(0)
+  readonly currentPage = signal(1);
+  readonly pageSize = 8;
+  readonly totalPages = computed(() =>
+    Math.ceil(this.heroes().length / this.pageSize)
+  );
+  readonly pages = computed(() =>
+    Array.from(
+      { length: this.totalPages() },
+      (_, index) => index + 1
+    )
+  );
+  readonly paginatedHeroes = computed(() => {
+    const start = (this.currentPage() - 1) * this.pageSize;
 
+    return this.heroes().slice(
+      start,
+      start + this.pageSize
+    );
+  });
 
   ngOnInit(): void {
     this.loadHeroes();
     this.searchControl.valueChanges
-    .pipe(
-      debounceTime(300),
-      distinctUntilChanged(),
-      switchMap(value =>
-        this.heroesService.searchByName(value.trim())
-      ),
-      takeUntilDestroyed(this.destroyRef)
-    )
-    .subscribe(heroes => {
-      this.heroes.set(heroes);
-    });
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap(value =>
+          this.heroesService.searchByName(value.trim())
+        ),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(heroes => {
+        this.heroes.set(heroes);
+        this.currentPage.set(1);
+      });
   }
 
   loadHeroes(): void {
@@ -68,11 +87,10 @@ export class HeroesList implements OnInit{
   }
   readonly deleteModalOpen = signal(false);
 
-  openDeleteModal(id:number): void {
+  openDeleteModal(id: number): void {
     this.deleteModalOpen.set(true);
     this.idHeroeDelete.set(id)
   }
-
   deleteHeroe(id: number): void {
     this.heroesService.delete(id).subscribe({
       next: () => {
@@ -83,5 +101,16 @@ export class HeroesList implements OnInit{
         this.messageService.showError('Error al eliminar al heroe!')
       },
     });
+  }
+  goToPage(page: number): void {
+    if (page < 1 || page > this.totalPages()) return;
+
+    this.currentPage.set(page);
+  }
+  previousPage(): void {
+    this.goToPage(this.currentPage() - 1);
+  }
+  nextPage(): void {
+    this.goToPage(this.currentPage() + 1);
   }
 }

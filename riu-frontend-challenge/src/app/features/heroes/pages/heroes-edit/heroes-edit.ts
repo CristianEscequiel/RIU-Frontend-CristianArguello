@@ -58,6 +58,7 @@ export class HeroesEdit implements OnInit {
         this.messageService.showSuccess(
           'Superheroe actualizado/a correctamente'
         );
+        this.navigateToHeroesList()
       },
       error: (error) => {
         this.messageService.showError(

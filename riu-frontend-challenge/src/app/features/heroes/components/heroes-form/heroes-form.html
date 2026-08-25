@@ -10,7 +10,7 @@
   <input [class.form-control--invalid]="isInvalid('superpower')" class="form-control" id="superpower" formControlName="superpower" />
   @if (heroesForm.get('superpower')?.invalid && heroesForm.get('superpower')?.touched) {
   <div class="form-error">
-    El superpoder es obligatorio.
+    El superpoder es obligatorio y debe contener mas de 10 caracteres.
   </div>
   }
     <label for="weakness">Debilidad:</label>
