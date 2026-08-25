@@ -1,3 +1,8 @@
+<app-header></app-header>
+<section class="container">
+  <router-outlet></router-outlet>
+</section>
+
 @if(loadingService.isLoading()) {
 <app-spinner size="lg" class="spinner-overlay" label="Cargando..." />
 }
@@ -6,4 +11,4 @@
 <app-toast [open]="true" [variant]="message()!.variant" [title]="message()!.title" [message]="message()!.message"
   (closed)="closeToast()" />
 }
-<router-outlet>
+

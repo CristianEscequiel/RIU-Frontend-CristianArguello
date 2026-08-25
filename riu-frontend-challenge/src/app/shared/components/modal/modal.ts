@@ -36,28 +36,20 @@ export class Modal {
 
   private previousBodyOverflow = '';
 
-  constructor() {
-    effect(() => {
-      if (this.isOpen()) {
-        this.openModal();
-      } else {
-        this.unlockBody();
-      }
-    });
-  }
-
   confirm(): void {
-    this.confirmed.emit();
     this.closeModal();
+    this.confirmed.emit();
   }
 
   cancel(): void {
-    this.cancelled.emit();
     this.closeModal();
+    this.cancelled.emit();
+
   }
 
   closeModal(): void {
     this.isOpen.set(false);
+    this.unlockBody()
   }
 
   onModalOverlayClick(event: MouseEvent): void {

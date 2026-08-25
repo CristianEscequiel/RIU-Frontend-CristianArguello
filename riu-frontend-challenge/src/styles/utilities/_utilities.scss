@@ -4,6 +4,15 @@
   display: none !important;
 }
 
+.u-fixed {
+  position: fixed;
+}
+
+.u-sticky {
+  position: sticky;
+  top: 0;
+}
+
 .u-sr-only {
   position: absolute;
 

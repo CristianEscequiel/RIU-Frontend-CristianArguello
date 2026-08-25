@@ -13,18 +13,17 @@ export const mockApiInterceptor: HttpInterceptorFn = (request, next) => {
   }
 
   if (request.method === 'GET' && request.url === '/api/heroes') {
-    if (!localStorage.getItem('heroes')) {
-      localStorage.setItem('heroes', JSON.stringify(HERO_MOCK));
-    }
+    const heroes: Hero[] = getHeroes()
+    const name = request.params.get('name')?.trim().toLowerCase();
 
-    const heroes: Hero[] = JSON.parse(
-      localStorage.getItem('heroes') ?? '[]'
-    );
-
+    const filteredHeroes = name ? heroes.filter(hero =>
+      hero.name.toLocaleLowerCase().includes(name)
+    )
+      : heroes;
     return of(
       new HttpResponse({
         status: 200,
-        body: heroes,
+        body: filteredHeroes,
       })
     ).pipe(delay(API_DELAY));
   }
@@ -33,9 +32,7 @@ export const mockApiInterceptor: HttpInterceptorFn = (request, next) => {
 
   if (request.method === 'GET' && detailMatch) {
     const id = Number(detailMatch[1]);
-    const heroes: Hero[] = JSON.parse(
-      localStorage.getItem('heroes') ?? '[]'
-    );
+    const heroes: Hero[] = getHeroes()
     const hero = heroes.find((item) => item.id === id);
 
     if (!hero) {
@@ -70,19 +67,19 @@ export const mockApiInterceptor: HttpInterceptorFn = (request, next) => {
             },
           }),
       );
+
     }
     const body = request.body as HeroCreateRequest;
-
+    const heroes: Hero[] = getHeroes()
+    const ids = heroes.map((hero) => hero.id);
+    const nextId = ids.length > 0 ? Math.max(...ids) + 1 : 1;
     const newWorkOrder: Hero = {
       ...body,
-      id: HERO_MOCK.length + 1,
+      id: nextId
     };
-    const heroes: Hero[] = JSON.parse(
-      localStorage.getItem('heroes') ?? '[]'
-    );
 
     heroes.push(newWorkOrder);
-    localStorage.setItem('heroes', JSON.stringify(heroes))
+    saveHeroes(heroes)
     return of(
       new HttpResponse({
         status: 201,
@@ -93,9 +90,7 @@ export const mockApiInterceptor: HttpInterceptorFn = (request, next) => {
 
   if (request.method === 'PUT' && detailMatch) {
     const id = Number(detailMatch[1]);
-    const heroes: Hero[] = JSON.parse(
-      localStorage.getItem('heroes') ?? '[]'
-    );
+    const heroes: Hero[] = getHeroes()
     const index = heroes.findIndex((item) => item.id === id);
 
     if (index === -1) {
@@ -125,7 +120,7 @@ export const mockApiInterceptor: HttpInterceptorFn = (request, next) => {
     const updatedHero: Hero = { ...heroes[index], ...request.body };
 
     heroes[index] = updatedHero;
-    localStorage.setItem('heroes', JSON.stringify(heroes))
+    saveHeroes(heroes)
 
     return of(
       new HttpResponse({
@@ -137,9 +132,7 @@ export const mockApiInterceptor: HttpInterceptorFn = (request, next) => {
 
   if (request.method === 'DELETE' && detailMatch) {
     const id = Number(detailMatch[1]);
-    const heroes: Hero[] = JSON.parse(
-      localStorage.getItem('heroes') ?? '[]'
-    );
+    const heroes: Hero[] = getHeroes()
     const index = heroes.findIndex((item) => item.id === id);
 
     if (index === -1) {
@@ -155,7 +148,7 @@ export const mockApiInterceptor: HttpInterceptorFn = (request, next) => {
       );
     }
     heroes.splice(index, 1);
-    localStorage.setItem('heroes', JSON.stringify(heroes))
+    saveHeroes(heroes)
 
     return of(
       new HttpResponse({
@@ -165,4 +158,28 @@ export const mockApiInterceptor: HttpInterceptorFn = (request, next) => {
   }
 
   return next(request);
+
 };
+
+function getHeroes(): Hero[] {
+  const savedHeroes = localStorage.getItem('heroes');
+
+  if (savedHeroes) {
+    return JSON.parse(savedHeroes) as Hero[];
+  }
+
+  const initialHeroes = [...HERO_MOCK];
+
+  saveHeroes(initialHeroes)
+
+  return initialHeroes;
+}
+
+function saveHeroes(heroes: Hero[]): void {
+  localStorage.setItem(
+    'heroes',
+    JSON.stringify(heroes),
+  );
+}
+
+

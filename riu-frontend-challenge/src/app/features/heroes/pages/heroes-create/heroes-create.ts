@@ -13,24 +13,24 @@ import { HeroCreateRequest } from '../../models/hero.model';
   styleUrl: './heroes-create.scss',
 })
 export class HeroesCreate {
-    private readonly workOrderService = inject(HeroesService);
+  private readonly heroesService = inject(HeroesService);
   private readonly messageService = inject(MessageService);
   private activateRoute = inject(Router)
 
   onSubmit(heroe: HeroCreateRequest): void {
 
-    const workOrderData: HeroCreateRequest = heroe;
-    this.workOrderService.create(workOrderData).subscribe({
-      next: (createdHeroe) => {
+    const heroeData: HeroCreateRequest = heroe;
+    this.heroesService.create(heroeData).subscribe({
+      next: () => {
         this.messageService.showSuccess('Heroe creado con éxito!!.');
-        console.log('Heroe creado con éxito!!', createdHeroe);
+        this.navigateToHeroesList()
       },
       error: (error) => {
         console.error('Error al crear heroe', error);
       },
     });
   }
-  navigateToWorkOrdersList(): void {
+  navigateToHeroesList(): void {
     this.activateRoute.navigate(['/heroes']);
   }
 }

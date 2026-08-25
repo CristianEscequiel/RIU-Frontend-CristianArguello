@@ -1,6 +1,8 @@
 <section class="container text-center">
   <div class="d-flex justify-between py-lg">
-    <h1>Super Heroes</h1>
+    <input class="form-control ml-lg" type="search" [formControl]="searchControl" placeholder="Buscar superheroe"
+            aria-label="Buscar superheroe por nombre" />
+    <span class="mx-lg"></span>
     <app-button variant="primary" (clicked)="navigateToCreateHeroe()">
       Crear Superheroe
     </app-button>
@@ -33,23 +35,23 @@
         <td>{{ heroes.superpower }}</td>
         <td>{{ heroes.weakness }}</td>
         <td>{{ heroes.enemy }}</td>
-        <td class="d-flex justify-center gap-sm">
-          <app-button size="sm" variant="outline" (clicked)="viewHeroe(heroes.id)">
-            Ver
-          </app-button>
-          <app-button size="sm" variant="secondary" (clicked)="editHeroe(heroes.id)">
-            Editar
-          </app-button>
-          <app-button size="sm" variant="danger" (clicked)="openDeleteModal()">
-            Eliminar
-          </app-button>
-          <app-modal [(isOpen)]="deleteModalOpen" title="Eliminar orden de trabajo"
-            message="¿Estás seguro de que querés eliminar este Superheroe? Esta acción no se puede deshacer."
-            confirmText="Eliminar" cancelText="Cancelar" (confirmed)="deleteHeroe(heroes.id)" />
+        <td>
+          <div class="d-flex gap-sm">
+            <app-button size="sm" variant="secondary" (clicked)="editHeroe(heroes.id)">
+              Editar
+            </app-button>
+            <app-button size="sm" variant="danger" (clicked)="openDeleteModal(heroes.id)">
+              Eliminar
+            </app-button>
+          </div>
+
         </td>
       </tr>
       }
     </tbody>
   </table>
   }
+  <app-modal [(isOpen)]="deleteModalOpen" title="Eliminar superheroe"
+    message="¿Estás seguro de que querés eliminar este Superheroe? Esta acción no se puede deshacer."
+    confirmText="Eliminar" cancelText="Cancelar" (confirmed)="deleteHeroe(idHeroeDelete())" />
 </section>

@@ -4,10 +4,11 @@ import { MessageService } from './core/services/message.service';
 import { LoadingService } from './core/services/loading.service';
 import { Spinner } from './shared/components/spinner/spinner';
 import { Toast } from './shared/components/toast/toast';
+import { Header } from './layout/header/header';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet , Spinner , Toast],
+  imports: [RouterOutlet , Spinner , Toast , Header],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

@@ -1,0 +1,119 @@
+@use '../abstracts' as a;
+
+// ==============================
+// BORDER
+// ==============================
+
+.border {
+  border: a.$border-width solid var(--color-border);
+}
+
+.border-none {
+  border: 0;
+}
+
+// ==============================
+// BORDER DIRECTIONS
+// ==============================
+
+.border-top {
+  border-top: a.$border-width solid var(--color-border);
+}
+
+.border-right {
+  border-right: a.$border-width solid var(--color-border);
+}
+
+.border-bottom {
+  border-bottom: a.$border-width solid var(--color-border);
+}
+
+.border-left {
+  border-left: a.$border-width solid var(--color-border);
+}
+
+.border-x {
+  border-left: a.$border-width solid var(--color-border);
+  border-right: a.$border-width solid var(--color-border);
+}
+
+.border-y {
+  border-top: a.$border-width solid var(--color-border);
+  border-bottom: a.$border-width solid var(--color-border);
+}
+
+// ==============================
+// BORDER COLORS
+// ==============================
+
+.border-color-default {
+  border-color: var(--color-border);
+}
+
+.border-color-subtle {
+  border-color: var(--color-border-subtle);
+}
+
+.border-color-primary {
+  border-color: var(--color-primary);
+}
+
+.border-color-success {
+  border-color: var(--color-success);
+}
+
+.border-color-warning {
+  border-color: var(--color-warning);
+}
+
+.border-color-error {
+  border-color: var(--color-error);
+}
+
+// ==============================
+// BORDER RADIUS
+// ==============================
+
+.radius-none {
+  border-radius: 0;
+}
+
+.radius-sm {
+  border-radius: a.$radius-sm;
+}
+
+.radius-md {
+  border-radius: a.$radius-md;
+}
+
+.radius-lg {
+  border-radius: a.$radius-lg;
+}
+
+.radius-full {
+  border-radius: a.$radius-full;
+}
+
+// ==============================
+// BORDER RADIUS DIRECTIONS
+// ==============================
+
+.radius-top {
+  border-top-left-radius: a.$radius-md;
+  border-top-right-radius: a.$radius-md;
+}
+
+.radius-bottom {
+  border-bottom-left-radius: a.$radius-md;
+  border-bottom-right-radius: a.$radius-md;
+}
+
+.radius-left {
+  border-top-left-radius: a.$radius-md;
+  border-bottom-left-radius: a.$radius-md;
+}
+
+.radius-right {
+  border-top-right-radius: a.$radius-md;
+  border-bottom-right-radius: a.$radius-md;
+}

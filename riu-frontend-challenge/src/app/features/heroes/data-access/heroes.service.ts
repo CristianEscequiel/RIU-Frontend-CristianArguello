@@ -22,11 +22,10 @@ export class HeroesService {
   searchByName(name: string): Observable<Hero[]> {
     return this.http.get<Hero[]>(this.apiUrl, {
       params: {
-        name_like: name
+        name
       }
     });
   }
-
   create(Hero: HeroCreateRequest): Observable<Hero> {
     return this.http.post<Hero>(this.apiUrl, Hero);
   }
