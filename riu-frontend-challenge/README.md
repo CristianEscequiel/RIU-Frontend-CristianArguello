@@ -216,6 +216,34 @@ En la ejecución final se completaron **33 tests distribuidos en 13 archivos**.
 
 `HeroesService` cuenta con 7 tests y `HeroesList` con 15 tests, mientras que el resto de los componentes principales cuentan con smoke tests para validar su correcta creación.
 
+Ambos alcanzan 100% de coverage en statements, branches, functions y lines.
+
+De esta manera se cubre completamente la lógica del servicio encargado del CRUD y búsqueda de héroes, junto con el componente principal responsable del listado, búsqueda, paginación y acciones sobre los héroes.
+
+## Docker
+
+La aplicación fue dockerizada utilizando una estrategia multi-stage.
+
+En la primera etapa se utiliza `node:22-alpine` para instalar las dependencias y generar el build de producción de Angular.
+
+En la segunda etapa se utiliza `nginx:alpine` para servir los archivos estáticos generados.
+
+También se agregó una configuración personalizada de Nginx utilizando:
+
+```bash
+nginx
+try_files $uri $uri/ /index.html;
+
+```
+Esto permite que las rutas internas de Angular funcionen correctamente al acceder directamente a URLs como /heroes/edit/:id, evitando errores 404 del servidor.
+
+La aplicación se expone mediante el puerto 80 del contenedor.
+
+Construcción de la imagen
+
+```bash
+docker build -t riu-frontend-challenge .
+```
 
 ## Ejecución
 
