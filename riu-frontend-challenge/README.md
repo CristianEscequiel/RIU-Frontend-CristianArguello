@@ -231,6 +231,12 @@ Iniciar el proyecto:
 npm start
 ```
 
+Realizar testing:
+
+```bash
+npm test -- --watch=false
+```
+
 ## Uso de IA
 
 No se utilizó IA agéntica para desarrollar o modificar automáticamente el proyecto.

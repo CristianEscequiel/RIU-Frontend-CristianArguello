@@ -28,7 +28,7 @@ export class HeroesEdit implements OnInit {
 
     this.heroesService.getById(id).subscribe({
       next: heroe => this.heroe.set(heroe),
-      error: error => this.messageService.showError(error)
+      error: error => this.messageService.showError('No se pudo cargar el superhéroe.')
     });
   }
   onSubmitEdit(heroe: HeroCreateRequest): void {
