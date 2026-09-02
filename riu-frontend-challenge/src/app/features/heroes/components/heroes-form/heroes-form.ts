@@ -7,7 +7,6 @@ import { Button } from '../../../../shared/components/button/button';
   selector: 'app-heroes-form',
   imports: [Button , ReactiveFormsModule],
   templateUrl: './heroes-form.html',
-  styleUrl: './heroes-form.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeroesForm {

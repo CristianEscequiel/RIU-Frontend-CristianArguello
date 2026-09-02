@@ -58,15 +58,6 @@
   }
 }
 
-.modal__header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: a.$spacing-md;
-
-  margin-bottom: a.$spacing-md;
-}
-
 .modal__content {
   padding-right: 2rem;
 }
@@ -95,22 +86,3 @@
   margin-top: 1.5rem;
 }
 
-.modal__footer {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: a.$spacing-sm;
-
-  margin-top: a.$spacing-lg;
-  padding-top: a.$spacing-md;
-
-  border-top: a.$border-width solid var(--color-border);
-}
-
-.modal--sm {
-  width: min(100%, 24rem);
-}
-
-.modal--lg {
-  width: min(100%, 48rem);
-}

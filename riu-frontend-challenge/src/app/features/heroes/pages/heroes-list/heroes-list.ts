@@ -77,9 +77,7 @@ export class HeroesList implements OnInit {
       });
   }
   editHero(id: number): void {
-    this._router.navigate(['/heroes', id, 'edit'], {
-      state: { id }
-    });
+    this._router.navigate(['/heroes', id, 'edit']);
   }
   navigateToCreateHero(): void {
     this._router.navigate(['/heroes/new']);

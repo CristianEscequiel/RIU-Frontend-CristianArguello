@@ -9,8 +9,7 @@ import { Header } from './layout/header/header';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet , Spinner , Toast , Header],
-  templateUrl: './app.html',
-  styleUrl: './app.scss'
+  templateUrl: './app.html'
 })
 export class App {
   private readonly _messageService = inject(MessageService);
