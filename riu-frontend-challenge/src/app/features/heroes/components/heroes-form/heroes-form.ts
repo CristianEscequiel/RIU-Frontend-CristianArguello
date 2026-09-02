@@ -1,4 +1,4 @@
-import { Component, inject, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HeroCreateRequest } from '../../models/hero.model';
 import { Button } from '../../../../shared/components/button/button';
@@ -8,30 +8,31 @@ import { Button } from '../../../../shared/components/button/button';
   imports: [Button , ReactiveFormsModule],
   templateUrl: './heroes-form.html',
   styleUrl: './heroes-form.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeroesForm {
-  private readonly fb = inject(FormBuilder);
-  inputData = input<HeroCreateRequest>();
-  sendData = output<HeroCreateRequest>();
-  mode = input('')
+  private readonly _fb = inject(FormBuilder);
+  readonly inputData = input<HeroCreateRequest>();
+  readonly sendData = output<HeroCreateRequest>();
+  readonly variant = input('create' as 'create' | 'edit');
 
-  readonly heroesForm = this.fb.group({
-    name: this.fb.control('', {
+  readonly heroesForm = this._fb.group({
+    name: this._fb.control('', {
       nonNullable: true,
       validators: [Validators.required, Validators.minLength(3)],
     }),
 
-    superpower: this.fb.control('', {
+    superpower: this._fb.control('', {
       nonNullable: true,
       validators: [Validators.required, Validators.minLength(10)],
     }),
 
-    weakness: this.fb.control('', {
+    weakness: this._fb.control('', {
       nonNullable: true,
       validators: [Validators.required],
     }),
 
-    enemy: this.fb.control('', {
+    enemy: this._fb.control('', {
       nonNullable: true,
       validators: [Validators.required],
     }),

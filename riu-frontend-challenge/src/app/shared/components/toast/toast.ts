@@ -1,10 +1,10 @@
-import { Component, computed, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 
 @Component({
   selector: 'app-toast',
   imports: [],
   templateUrl: './toast.html',
-  styleUrl: './toast.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Toast {
   open = input.required<boolean>();

@@ -1,21 +1,10 @@
-import {
-  Component,
-  DOCUMENT,
-  ElementRef,
-  HostListener,
-  ViewChild,
-  effect,
-  inject,
-  input,
-  model,
-  output,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, DOCUMENT, ElementRef, HostListener, ViewChild, effect, inject, input, model, output } from '@angular/core';
 
 @Component({
   selector: 'app-modal',
   imports: [],
   templateUrl: './modal.html',
-  styleUrl: './modal.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Modal {
   @ViewChild('modalCloseButton')
@@ -35,6 +24,16 @@ export class Modal {
   private readonly document = inject(DOCUMENT);
 
   private previousBodyOverflow = '';
+
+  constructor() {
+    effect(() => {
+      if (this.isOpen()) {
+        this.openModal();
+      } else {
+        this.unlockBody();
+      }
+    });
+  }
 
   confirm(): void {
     this.closeModal();

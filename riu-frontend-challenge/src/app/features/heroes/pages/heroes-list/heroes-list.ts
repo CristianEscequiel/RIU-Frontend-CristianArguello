@@ -14,19 +14,19 @@ import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
   selector: 'app-heroes-list',
   imports: [Button, Modal, Alert, ReactiveFormsModule],
   templateUrl: './heroes-list.html',
-  styleUrl: './heroes-list.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeroesList implements OnInit {
-  private readonly destroyRef = inject(DestroyRef)
-  private readonly route = inject(Router);
-  private readonly heroesService = inject(HeroesService);
-  private readonly messageService = inject(MessageService)
+  private readonly _destroyRef = inject(DestroyRef)
+  private readonly _router = inject(Router);
+  private readonly _heroesService = inject(HeroesService);
+  private readonly _messageService = inject(MessageService)
   readonly heroes = signal<Hero[]>([]);
   readonly error = signal<string | null>(null);
   readonly isModalOpen = signal<boolean>(false)
+  readonly deleteModalOpen = signal(false);
   readonly searchControl = new FormControl('', { nonNullable: true });
-  idHeroeDelete = signal<number>(0)
+  readonly heroIdToDelete = signal<number>(0);
   readonly currentPage = signal(1);
   readonly pageSize = 8;
   readonly totalPages = computed(() =>
@@ -40,7 +40,6 @@ export class HeroesList implements OnInit {
   );
   readonly paginatedHeroes = computed(() => {
     const start = (this.currentPage() - 1) * this.pageSize;
-
     return this.heroes().slice(
       start,
       start + this.pageSize
@@ -54,9 +53,9 @@ export class HeroesList implements OnInit {
         debounceTime(300),
         distinctUntilChanged(),
         switchMap(value =>
-          this.heroesService.searchByName(value.trim())
+          this._heroesService.searchByName(value.trim())
         ),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this._destroyRef)
       )
       .subscribe(heroes => {
         this.heroes.set(heroes);
@@ -66,7 +65,7 @@ export class HeroesList implements OnInit {
 
   loadHeroes(): void {
     this.error.set(null);
-    this.heroesService
+    this._heroesService
       .getAll()
       .subscribe({
         next: (heroes) => {
@@ -77,28 +76,28 @@ export class HeroesList implements OnInit {
         },
       });
   }
-  editHeroe(id: number): void {
-    this.route.navigate(['/heroes', id, 'edit'], {
+  editHero(id: number): void {
+    this._router.navigate(['/heroes', id, 'edit'], {
       state: { id }
     });
   }
-  navigateToCreateHeroe(): void {
-    this.route.navigate(['/heroes/new']);
+  navigateToCreateHero(): void {
+    this._router.navigate(['/heroes/new']);
   }
-  readonly deleteModalOpen = signal(false);
 
   openDeleteModal(id: number): void {
     this.deleteModalOpen.set(true);
-    this.idHeroeDelete.set(id)
+    this.heroIdToDelete.set(id)
   }
-  deleteHeroe(id: number): void {
-    this.heroesService.delete(id).subscribe({
+  deleteHero(id: number): void {
+    this._heroesService.delete(id).subscribe({
       next: () => {
-        this.messageService.showSuccess('Heroe eliminado satisfactoriamente.');
+        this._messageService.showSuccess('Heroe eliminado satisfactoriamente.');
+        this.currentPage.set(this.heroes().length % this.pageSize === 1 && this.currentPage() > 1 ? this.currentPage() - 1 : this.currentPage());
         this.loadHeroes();
       },
-      error: (error) => {
-        this.messageService.showError('Error al eliminar al heroe!')
+      error: () => {
+        this._messageService.showError('Error al eliminar al heroe!')
       },
     });
   }

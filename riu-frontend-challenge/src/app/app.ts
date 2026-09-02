@@ -13,11 +13,10 @@ import { Header } from './layout/header/header';
   styleUrl: './app.scss'
 })
 export class App {
-  protected readonly title = signal('angular-enterprise-lab');
-  private readonly messageService = inject(MessageService);
+  private readonly _messageService = inject(MessageService);
   readonly loadingService = inject(LoadingService);
-  message = this.messageService.message;
+  message = this._messageService.message;
   closeToast() {
-    this.messageService.clear();
+    this._messageService.clear();
   }
 }

@@ -73,17 +73,17 @@ export const mockApiInterceptor: HttpInterceptorFn = (request, next) => {
     const heroes: Hero[] = getHeroes()
     const ids = heroes.map((hero) => hero.id);
     const nextId = ids.length > 0 ? Math.max(...ids) + 1 : 1;
-    const newWorkOrder: Hero = {
+    const newHero: Hero = {
       ...body,
       id: nextId
     };
 
-    heroes.push(newWorkOrder);
+    heroes.push(newHero);
     saveHeroes(heroes)
     return of(
       new HttpResponse({
         status: 201,
-        body: newWorkOrder,
+        body: newHero,
       }),
     ).pipe(delay(API_DELAY));
   }

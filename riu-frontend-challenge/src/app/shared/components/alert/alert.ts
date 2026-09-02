@@ -1,10 +1,10 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-alert',
   imports: [],
   templateUrl: './alert.html',
-  styleUrl: './alert.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Alert {
   title = input.required<string>();

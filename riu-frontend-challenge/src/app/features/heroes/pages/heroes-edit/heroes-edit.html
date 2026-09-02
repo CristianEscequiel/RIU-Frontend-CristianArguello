@@ -5,7 +5,7 @@
       Volver a Lista de Superheroes
     </app-button>
   </div>
-  @if (heroe(); as heroe) {
-  <app-heroes-form mode="edit" [inputData]="heroe" (sendData)="onSubmitEdit($event)" />
+  @if (hero(); as hero) {
+  <app-heroes-form variant='edit' [inputData]="hero" (sendData)="onSubmitEdit($event)" />
   }
 </section>

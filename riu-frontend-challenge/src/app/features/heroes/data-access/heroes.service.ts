@@ -8,33 +8,33 @@ import { Hero, HeroCreateRequest } from '../models/hero.model';
   providedIn: 'root',
 })
 export class HeroesService {
-  private readonly http = inject(HttpClient);
-  private readonly apiUrl = '/api/heroes';
+  private readonly _http = inject(HttpClient);
+  private readonly _apiUrl = '/api/heroes';
 
   getAll(): Observable<Hero[]> {
-    return this.http.get<Hero[]>(this.apiUrl);
+    return this._http.get<Hero[]>(this._apiUrl);
   }
 
   getById(id: number): Observable<Hero> {
-    return this.http.get<Hero>(`${this.apiUrl}/${id}`);
+    return this._http.get<Hero>(`${this._apiUrl}/${id}`);
   }
 
   searchByName(name: string): Observable<Hero[]> {
-    return this.http.get<Hero[]>(this.apiUrl, {
+    return this._http.get<Hero[]>(this._apiUrl, {
       params: {
         name
       }
     });
   }
-  create(Hero: HeroCreateRequest): Observable<Hero> {
-    return this.http.post<Hero>(this.apiUrl, Hero);
+  create(hero: HeroCreateRequest): Observable<Hero> {
+    return this._http.post<Hero>(this._apiUrl, hero);
   }
 
-  update(id: number, Hero: Hero): Observable<Hero> {
-    return this.http.put<Hero>(`${this.apiUrl}/${id}`, Hero);
+  update(id: number, hero: Hero): Observable<Hero> {
+    return this._http.put<Hero>(`${this._apiUrl}/${id}`, hero);
   }
 
   delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this._http.delete<void>(`${this._apiUrl}/${id}`);
   }
 }

@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Button } from '../../shared/components/button/button';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -9,11 +9,12 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrl: './home.scss',
 })
 export class Home {
-private readonly route = inject(Router)
+private readonly _router = inject(Router)
+
 onViewAll() {
-  this.route.navigate(['/heroes'])
+  this._router.navigate(['/heroes'])
 }
 onCreateHero() {
-  this.route.navigate(['/heroes/new'])
+  this._router.navigate(['/heroes/new'])
 }
 }

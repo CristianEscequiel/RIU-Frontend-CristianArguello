@@ -174,7 +174,7 @@ describe('HeroesList', () => {
   });
 
   it('should navigate to create hero', () => {
-    component.navigateToCreateHeroe();
+    component.navigateToCreateHero();
 
     expect(routerMock.navigate).toHaveBeenCalledWith([
       '/heroes/new',
@@ -182,7 +182,7 @@ describe('HeroesList', () => {
   });
 
   it('should navigate to edit hero', () => {
-    component.editHeroe(5);
+    component.editHero(5);
 
     expect(routerMock.navigate).toHaveBeenCalledWith(
       ['/heroes', 5, 'edit'],
@@ -198,7 +198,7 @@ describe('HeroesList', () => {
     component.openDeleteModal(5);
 
     expect(component.deleteModalOpen()).toBe(true);
-    expect(component.idHeroeDelete()).toBe(5);
+    expect(component.heroIdToDelete()).toBe(5);
   });
 
   it('should delete hero, show success and reload heroes', () => {
@@ -206,7 +206,7 @@ describe('HeroesList', () => {
       .spyOn(component, 'loadHeroes')
       .mockImplementation(() => {});
 
-    component.deleteHeroe(5);
+    component.deleteHero(5);
 
     expect(heroesServiceMock.delete).toHaveBeenCalledWith(5);
 
@@ -224,7 +224,7 @@ describe('HeroesList', () => {
       throwError(() => new Error('Delete error')),
     );
 
-    component.deleteHeroe(5);
+    component.deleteHero(5);
 
     expect(messageServiceMock.showError).toHaveBeenCalledWith(
       'Error al eliminar al heroe!',

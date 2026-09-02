@@ -9,28 +9,25 @@ import { HeroCreateRequest } from '../../models/hero.model';
 @Component({
   selector: 'app-heroes-create',
   imports: [HeroesForm , Button] ,
-  templateUrl: './heroes-create.html',
-  styleUrl: './heroes-create.scss',
+  templateUrl: './heroes-create.html'
 })
 export class HeroesCreate {
-  private readonly heroesService = inject(HeroesService);
-  private readonly messageService = inject(MessageService);
-  private activateRoute = inject(Router)
+  private readonly _heroesService = inject(HeroesService);
+  private readonly _messageService = inject(MessageService);
+  private readonly _router = inject(Router)
 
-  onSubmit(heroe: HeroCreateRequest): void {
-
-    const heroeData: HeroCreateRequest = heroe;
-    this.heroesService.create(heroeData).subscribe({
+  onSubmit(hero: HeroCreateRequest): void {
+    this._heroesService.create(hero).subscribe({
       next: () => {
-        this.messageService.showSuccess('Heroe creado con éxito!!.');
+        this._messageService.showSuccess('Heroe creado con éxito!!.');
         this.navigateToHeroesList()
       },
-      error: (error) => {
-        console.error('Error al crear heroe', error);
+      error: () => {
+        this._messageService.showError('No se pudo crear el superheroe.');
       },
     });
   }
   navigateToHeroesList(): void {
-    this.activateRoute.navigate(['/heroes']);
+    this._router.navigate(['/heroes']);
   }
 }
