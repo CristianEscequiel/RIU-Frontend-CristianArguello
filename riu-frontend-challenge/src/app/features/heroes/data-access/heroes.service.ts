@@ -22,8 +22,8 @@ export class HeroesService {
   searchByName(name: string): Observable<Hero[]> {
     return this._http.get<Hero[]>(this._apiUrl, {
       params: {
-        name
-      }
+        name,
+      },
     });
   }
 

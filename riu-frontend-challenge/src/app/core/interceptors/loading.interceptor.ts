@@ -17,6 +17,6 @@ export const loadingInterceptor: HttpInterceptorFn = (request, next) => {
   return next(request).pipe(
     finalize(() => {
       loadingService.hide();
-    })
+    }),
   );
 };

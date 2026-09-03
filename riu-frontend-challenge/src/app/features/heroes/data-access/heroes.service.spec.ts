@@ -1,9 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
-import {
-  HttpTestingController,
-  provideHttpClientTesting,
-} from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { HeroesService } from './heroes.service';
 import { Hero, HeroCreateRequest } from '../models/hero.model';
@@ -29,11 +26,7 @@ describe('HeroesService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        HeroesService,
-        provideHttpClient(),
-        provideHttpClientTesting(),
-      ],
+      providers: [HeroesService, provideHttpClient(), provideHttpClientTesting()],
     });
 
     service = TestBed.inject(HeroesService);
@@ -80,9 +73,7 @@ describe('HeroesService', () => {
     });
 
     const request = httpTesting.expectOne(
-      (req) =>
-        req.url === '/api/heroes' &&
-        req.params.get('name') === 'man',
+      (req) => req.url === '/api/heroes' && req.params.get('name') === 'man',
     );
 
     expect(request.request.method).toBe('GET');

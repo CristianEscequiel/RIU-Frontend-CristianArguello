@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MessageService } from './core/services/message.service';
 import { LoadingService } from './core/services/loading.service';
@@ -8,8 +8,8 @@ import { Header } from './layout/header/header';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet , Spinner , Toast , Header],
-  templateUrl: './app.html'
+  imports: [RouterOutlet, Spinner, Toast, Header],
+  templateUrl: './app.html',
 })
 export class App {
   private readonly _messageService = inject(MessageService);

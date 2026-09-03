@@ -8,11 +8,7 @@
   padding: var(--spacing-xl);
 
   background:
-    radial-gradient(
-      circle at 50% 0%,
-      var(--color-primary-subtle),
-      transparent 45%
-    ),
+    radial-gradient(circle at 50% 0%, var(--color-primary-subtle), transparent 45%),
     var(--color-background);
 
   &__content {

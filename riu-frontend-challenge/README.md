@@ -46,8 +46,8 @@ src/app/
 │       ├── components/
 │       ├── data-access/
 │       ├── models/
-│       ├── pages/
-│       └── routes/
+│       └── pages/
+│
 ├── layout/
 ├── pages/
 └── shared/
@@ -99,7 +99,7 @@ Un ejemplo es la paginación, donde a partir de la información disponible se ca
 En los componentes con mayor interacción, como el listado y la edición de héroes, también se utilizó:
 
 ```ts
-ChangeDetectionStrategy.OnPush
+ChangeDetectionStrategy.OnPush;
 ```
 
 ## Persistencia de datos
@@ -123,7 +123,7 @@ De esta forma los componentes y servicios trabajan sobre peticiones HTTP sin dep
 La búsqueda se realiza mediante el método:
 
 ```ts
-searchByName()
+searchByName();
 ```
 
 El flujo utiliza operadores de RxJS:
@@ -235,6 +235,7 @@ nginx
 try_files $uri $uri/ /index.html;
 
 ```
+
 Esto permite que las rutas internas de Angular funcionen correctamente al acceder directamente a URLs como /heroes/edit/:id, evitando errores 404 del servidor.
 
 La aplicación se expone mediante el puerto 80 del contenedor.

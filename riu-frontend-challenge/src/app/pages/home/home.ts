@@ -9,12 +9,12 @@ import { Router } from '@angular/router';
   styleUrl: './home.scss',
 })
 export class Home {
-private readonly _router = inject(Router)
+  private readonly _router = inject(Router);
 
-onViewAll() {
-  this._router.navigate(['/heroes'])
-}
-onCreateHero() {
-  this._router.navigate(['/heroes/new'])
-}
+  onViewAll() {
+    this._router.navigate(['/heroes']);
+  }
+  onCreateHero() {
+    this._router.navigate(['/heroes/new']);
+  }
 }

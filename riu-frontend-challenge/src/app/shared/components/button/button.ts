@@ -4,10 +4,9 @@ import { ChangeDetectionStrategy, Component, computed, input, output } from '@an
   selector: 'app-button',
   imports: [],
   templateUrl: './button.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Button {
-
   clicked = output<void>();
   variant = input<'primary' | 'secondary' | 'outline' | 'danger'>('primary');
   size = input<'sm' | 'md' | 'lg' | 'full'>('md');
@@ -27,5 +26,4 @@ export class Button {
   onClick(): void {
     this.clicked.emit();
   }
-
 }

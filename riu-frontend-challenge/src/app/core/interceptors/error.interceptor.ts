@@ -1,8 +1,5 @@
 import { inject } from '@angular/core';
-import {
-  HttpErrorResponse,
-  HttpInterceptorFn,
-} from '@angular/common/http';
+import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 
 import { MessageService } from '../services/message.service';
@@ -29,7 +26,7 @@ export const errorInterceptor: HttpInterceptorFn = (request, next) => {
       messageService.showError('Ocurrió un error inesperado.');
 
       return throwError(() => error);
-    })
+    }),
   );
 };
 

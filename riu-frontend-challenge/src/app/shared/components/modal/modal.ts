@@ -1,10 +1,22 @@
-import { ChangeDetectionStrategy, Component, DOCUMENT, ElementRef, HostListener, ViewChild, effect, inject, input, model, output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DOCUMENT,
+  ElementRef,
+  HostListener,
+  ViewChild,
+  effect,
+  inject,
+  input,
+  model,
+  output,
+} from '@angular/core';
 
 @Component({
   selector: 'app-modal',
   imports: [],
   templateUrl: './modal.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Modal {
   @ViewChild('modalCloseButton')
@@ -43,12 +55,11 @@ export class Modal {
   cancel(): void {
     this.closeModal();
     this.cancelled.emit();
-
   }
 
   closeModal(): void {
     this.isOpen.set(false);
-    this.unlockBody()
+    this.unlockBody();
   }
 
   onModalOverlayClick(event: MouseEvent): void {

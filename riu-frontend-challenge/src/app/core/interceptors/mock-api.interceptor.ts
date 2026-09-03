@@ -7,24 +7,22 @@ import { Hero, HeroCreateRequest } from '../../features/heroes/models/hero.model
 const API_DELAY = 800;
 
 export const mockApiInterceptor: HttpInterceptorFn = (request, next) => {
-
   if (!request.url.startsWith('/api/heroes')) {
     return next(request);
   }
 
   if (request.method === 'GET' && request.url === '/api/heroes') {
-    const heroes: Hero[] = getHeroes()
+    const heroes: Hero[] = getHeroes();
     const name = request.params.get('name')?.trim().toLowerCase();
 
-    const filteredHeroes = name ? heroes.filter(hero =>
-      hero.name.toLocaleLowerCase().includes(name)
-    )
+    const filteredHeroes = name
+      ? heroes.filter((hero) => hero.name.toLocaleLowerCase().includes(name))
       : heroes;
     return of(
       new HttpResponse({
         status: 200,
         body: filteredHeroes,
-      })
+      }),
     ).pipe(delay(API_DELAY));
   }
 
@@ -35,25 +33,23 @@ export const mockApiInterceptor: HttpInterceptorFn = (request, next) => {
     const excludeIdParam = request.params.get('excludeId');
     const excludeId = excludeIdParam ? Number(excludeIdParam) : null;
 
-    const exists = !!name && heroes.some(hero =>
-      hero.name.trim().toLowerCase() === name &&
-      hero.id !== excludeId
-    );
+    const exists =
+      !!name &&
+      heroes.some((hero) => hero.name.trim().toLowerCase() === name && hero.id !== excludeId);
 
     return of(
       new HttpResponse({
         status: 200,
         body: exists,
-      })
+      }),
     ).pipe(delay(API_DELAY));
   }
-
 
   const detailMatch = request.url.match(/^\/api\/heroes\/(\d+)$/);
 
   if (request.method === 'GET' && detailMatch) {
     const id = Number(detailMatch[1]);
-    const heroes: Hero[] = getHeroes()
+    const heroes: Hero[] = getHeroes();
     const hero = heroes.find((item) => item.id === id);
 
     if (!hero) {
@@ -88,19 +84,18 @@ export const mockApiInterceptor: HttpInterceptorFn = (request, next) => {
             },
           }),
       );
-
     }
     const body = request.body as HeroCreateRequest;
-    const heroes: Hero[] = getHeroes()
+    const heroes: Hero[] = getHeroes();
     const ids = heroes.map((hero) => hero.id);
     const nextId = ids.length > 0 ? Math.max(...ids) + 1 : 1;
     const newHero: Hero = {
       ...body,
-      id: nextId
+      id: nextId,
     };
 
     heroes.push(newHero);
-    saveHeroes(heroes)
+    saveHeroes(heroes);
     return of(
       new HttpResponse({
         status: 201,
@@ -111,7 +106,7 @@ export const mockApiInterceptor: HttpInterceptorFn = (request, next) => {
 
   if (request.method === 'PUT' && detailMatch) {
     const id = Number(detailMatch[1]);
-    const heroes: Hero[] = getHeroes()
+    const heroes: Hero[] = getHeroes();
     const index = heroes.findIndex((item) => item.id === id);
 
     if (index === -1) {
@@ -141,7 +136,7 @@ export const mockApiInterceptor: HttpInterceptorFn = (request, next) => {
     const updatedHero: Hero = { ...heroes[index], ...request.body };
 
     heroes[index] = updatedHero;
-    saveHeroes(heroes)
+    saveHeroes(heroes);
 
     return of(
       new HttpResponse({
@@ -153,7 +148,7 @@ export const mockApiInterceptor: HttpInterceptorFn = (request, next) => {
 
   if (request.method === 'DELETE' && detailMatch) {
     const id = Number(detailMatch[1]);
-    const heroes: Hero[] = getHeroes()
+    const heroes: Hero[] = getHeroes();
     const index = heroes.findIndex((item) => item.id === id);
 
     if (index === -1) {
@@ -169,7 +164,7 @@ export const mockApiInterceptor: HttpInterceptorFn = (request, next) => {
       );
     }
     heroes.splice(index, 1);
-    saveHeroes(heroes)
+    saveHeroes(heroes);
 
     return of(
       new HttpResponse({
@@ -179,7 +174,6 @@ export const mockApiInterceptor: HttpInterceptorFn = (request, next) => {
   }
 
   return next(request);
-
 };
 
 function getHeroes(): Hero[] {
@@ -191,16 +185,11 @@ function getHeroes(): Hero[] {
 
   const initialHeroes = [...HERO_MOCK];
 
-  saveHeroes(initialHeroes)
+  saveHeroes(initialHeroes);
 
   return initialHeroes;
 }
 
 function saveHeroes(heroes: Hero[]): void {
-  localStorage.setItem(
-    'heroes',
-    JSON.stringify(heroes),
-  );
+  localStorage.setItem('heroes', JSON.stringify(heroes));
 }
-
-

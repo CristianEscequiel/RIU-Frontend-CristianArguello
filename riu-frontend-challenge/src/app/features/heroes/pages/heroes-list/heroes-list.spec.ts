@@ -13,16 +13,13 @@ describe('HeroesList', () => {
   let component: HeroesList;
   let fixture: ComponentFixture<HeroesList>;
 
-  const heroes: Hero[] = Array.from(
-    { length: 20 },
-    (_, index) => ({
-      id: index + 1,
-      name: `Hero ${index + 1}`,
-      superpower: `Super poder número ${index + 1}`,
-      weakness: `Debilidad ${index + 1}`,
-      enemy: `Enemigo ${index + 1}`,
-    }),
-  );
+  const heroes: Hero[] = Array.from({ length: 20 }, (_, index) => ({
+    id: index + 1,
+    name: `Hero ${index + 1}`,
+    superpower: `Super poder número ${index + 1}`,
+    weakness: `Debilidad ${index + 1}`,
+    enemy: `Enemigo ${index + 1}`,
+  }));
 
   const heroesServiceMock = {
     getAll: vi.fn(),
@@ -85,15 +82,11 @@ describe('HeroesList', () => {
   });
 
   it('should set error when loading heroes fails', () => {
-    heroesServiceMock.getAll.mockReturnValue(
-      throwError(() => new Error('Load error')),
-    );
+    heroesServiceMock.getAll.mockReturnValue(throwError(() => new Error('Load error')));
 
     component.loadHeroes();
 
-    expect(component.error()).toBe(
-      'No se pudieron cargar a los heroes.',
-    );
+    expect(component.error()).toBe('No se pudieron cargar a los héroes.');
   });
 
   it('should calculate pagination correctly', () => {
@@ -111,15 +104,11 @@ describe('HeroesList', () => {
     component.goToPage(2);
 
     expect(component.currentPage()).toBe(2);
-    expect(component.paginatedHeroes()).toEqual(
-      heroes.slice(8, 16),
-    );
+    expect(component.paginatedHeroes()).toEqual(heroes.slice(8, 16));
 
     component.goToPage(3);
 
-    expect(component.paginatedHeroes()).toEqual(
-      heroes.slice(16, 20),
-    );
+    expect(component.paginatedHeroes()).toEqual(heroes.slice(16, 20));
   });
 
   it('should ignore invalid page numbers', () => {
@@ -153,9 +142,7 @@ describe('HeroesList', () => {
 
     const filteredHeroes = [heroes[0], heroes[1]];
 
-    heroesServiceMock.searchByName.mockReturnValue(
-      of(filteredHeroes),
-    );
+    heroesServiceMock.searchByName.mockReturnValue(of(filteredHeroes));
 
     fixture.detectChanges();
 
@@ -165,9 +152,7 @@ describe('HeroesList', () => {
 
     await vi.advanceTimersByTimeAsync(300);
 
-    expect(
-      heroesServiceMock.searchByName,
-    ).toHaveBeenCalledWith('man');
+    expect(heroesServiceMock.searchByName).toHaveBeenCalledWith('man');
 
     expect(component.heroes()).toEqual(filteredHeroes);
     expect(component.currentPage()).toBe(1);
@@ -176,22 +161,13 @@ describe('HeroesList', () => {
   it('should navigate to create hero', () => {
     component.navigateToCreateHero();
 
-    expect(routerMock.navigate).toHaveBeenCalledWith([
-      '/heroes/new',
-    ]);
+    expect(routerMock.navigate).toHaveBeenCalledWith(['/heroes/new']);
   });
 
   it('should navigate to edit hero', () => {
     component.editHero(5);
 
-    expect(routerMock.navigate).toHaveBeenCalledWith(
-      ['/heroes', 5, 'edit'],
-      {
-        state: {
-          id: 5,
-        },
-      },
-    );
+    expect(routerMock.navigate).toHaveBeenCalledWith(['/heroes', 5, 'edit']);
   });
 
   it('should open delete confirmation modal for selected hero', () => {
@@ -202,33 +178,25 @@ describe('HeroesList', () => {
   });
 
   it('should delete hero, show success and reload heroes', () => {
-    const loadHeroesSpy = vi
-      .spyOn(component, 'loadHeroes')
-      .mockImplementation(() => {});
+    const loadHeroesSpy = vi.spyOn(component, 'loadHeroes');
 
     component.deleteHero(5);
 
     expect(heroesServiceMock.delete).toHaveBeenCalledWith(5);
 
-    expect(
-      messageServiceMock.showSuccess,
-    ).toHaveBeenCalledWith(
-      'Heroe eliminado satisfactoriamente.',
+    expect(messageServiceMock.showSuccess).toHaveBeenCalledWith(
+      'Héroe eliminado satisfactoriamente.',
     );
 
     expect(loadHeroesSpy).toHaveBeenCalled();
   });
 
   it('should show error when deleting hero fails', () => {
-    heroesServiceMock.delete.mockReturnValue(
-      throwError(() => new Error('Delete error')),
-    );
+    heroesServiceMock.delete.mockReturnValue(throwError(() => new Error('Delete error')));
 
     component.deleteHero(5);
 
-    expect(messageServiceMock.showError).toHaveBeenCalledWith(
-      'Error al eliminar al heroe!',
-    );
+    expect(messageServiceMock.showError).toHaveBeenCalledWith('Error al eliminar al héroe!');
   });
 
   it('should delete selected hero when modal confirms', () => {
@@ -236,20 +204,17 @@ describe('HeroesList', () => {
 
     component.openDeleteModal(3);
 
-    const modal = fixture.debugElement.query(
-      By.directive(Modal),
-    ).componentInstance as Modal;
+    const modal = fixture.debugElement.query(By.directive(Modal)).componentInstance as Modal;
 
     modal.confirmed.emit();
 
     expect(heroesServiceMock.delete).toHaveBeenCalledWith(3);
   });
 
-  it('should render only the first page of heroes', () => {
+  it('should render only the first page of héroes', () => {
     fixture.detectChanges();
 
-    const rows =
-      fixture.nativeElement.querySelectorAll('tbody tr');
+    const rows = fixture.nativeElement.querySelectorAll('tbody tr');
 
     expect(rows.length).toBe(8);
   });

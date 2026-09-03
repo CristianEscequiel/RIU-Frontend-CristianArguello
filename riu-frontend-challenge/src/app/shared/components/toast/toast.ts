@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, Component, computed, input, output } from '@an
   selector: 'app-toast',
   imports: [],
   templateUrl: './toast.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Toast {
   open = input.required<boolean>();

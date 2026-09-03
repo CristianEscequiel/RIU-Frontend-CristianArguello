@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, OnInit, output } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HeroCreateRequest } from '../../models/hero.model';
 import { Button } from '../../../../shared/components/button/button';
@@ -12,7 +12,7 @@ import { Spinner } from '../../../../shared/components/spinner/spinner';
   templateUrl: './heroes-form.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HeroesForm {
+export class HeroesForm implements OnInit {
   private readonly _fb = inject(FormBuilder);
   private readonly _heroesService = inject(HeroesService);
   readonly inputData = input<HeroCreateRequest>();
@@ -24,7 +24,7 @@ export class HeroesForm {
     name: this._fb.control('', {
       nonNullable: true,
       validators: [Validators.required, Validators.minLength(3)],
-      asyncValidators: [uniqueNameValidator(inject(HeroesService))]
+      asyncValidators: [uniqueNameValidator(inject(HeroesService))],
     }),
 
     superpower: this._fb.control('', {
@@ -64,13 +64,8 @@ export class HeroesForm {
   configureNameValidator(heroId?: number): void {
     const nameControl = this.heroesForm.controls.name;
 
-    nameControl.setAsyncValidators([
-      uniqueNameValidator(this._heroesService, heroId)
-    ]);
+    nameControl.setAsyncValidators([uniqueNameValidator(this._heroesService, heroId)]);
 
     nameControl.updateValueAndValidity();
   }
-
 }
-
-
