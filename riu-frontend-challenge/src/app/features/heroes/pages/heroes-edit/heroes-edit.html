@@ -1,11 +1,11 @@
 <section class="container">
   <div class="d-flex justify-between py-lg">
-    <h1>Editar Superheroe</h1>
+    <h1>Editar Superhéroe</h1>
     <app-button variant="primary" (clicked)="navigateToHeroesList()">
-      Volver a Lista de Superheroes
+      Volver a Lista de Superhéroes
     </app-button>
   </div>
   @if (hero(); as hero) {
-  <app-heroes-form variant='edit' [inputData]="hero" (sendData)="onSubmitEdit($event)" />
+  <app-heroes-form variant='edit' [heroId]="hero.id" [inputData]="hero" (sendData)="onSubmitEdit($event)" />
   }
 </section>

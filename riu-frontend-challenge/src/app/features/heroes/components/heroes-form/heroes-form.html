@@ -1,33 +1,63 @@
 <form class="form-group form-control" [formGroup]="heroesForm" (ngSubmit)="onSubmit()">
   <label for="name">Nombre:</label>
   <input [class.form-control--invalid]="isInvalid('name')" class="form-control" id="name" formControlName="name" />
-  @if (heroesForm.get('name')?.invalid && heroesForm.get('name')?.touched) {
+  @let nameControl = heroesForm.controls.name;
+  @if (nameControl.touched && nameControl.hasError('required')) {
   <div class="form-error">
-    El nombre del superheroe es obligatorio.
+    El nombre del superhéroe es obligatorio.
   </div>
   }
-    <label for="superpower">Superpoder:</label>
-  <input [class.form-control--invalid]="isInvalid('superpower')" class="form-control" id="superpower" formControlName="superpower" />
+  @if (nameControl.touched && nameControl.hasError('minlength')) {
+  <div class="form-error">
+    El nombre debe tener al menos 3 caracteres.
+  </div>
+  }
+  @if (nameControl.hasError('nameTaken')) {
+  <div class="form-error">
+    Ya existe un superhéroe con ese nombre.
+  </div>
+  }
+  @if (nameControl.touched && nameControl.pending) {
+  <p class="form-help">
+    Verificando disponibilidad...
+    <app-spinner size="sm" />
+  </p>
+  }
+  @if (
+    nameControl.valid &&
+    nameControl.touched &&
+    !nameControl.pending
+  ) {
+  <p class="form-success">
+    Nombre disponible.
+  </p>
+  }
+  <label for="superpower">Superpoder:</label>
+  <input [class.form-control--invalid]="isInvalid('superpower')" class="form-control" id="superpower"
+    formControlName="superpower" />
   @if (heroesForm.get('superpower')?.invalid && heroesForm.get('superpower')?.touched) {
   <div class="form-error">
     El superpoder es obligatorio y debe contener mas de 10 caracteres.
   </div>
   }
-    <label for="weakness">Debilidad:</label>
-  <input [class.form-control--invalid]="isInvalid('weakness')" class="form-control" id="weakness" formControlName="weakness" />
+  <label for="weakness">Debilidad:</label>
+  <input [class.form-control--invalid]="isInvalid('weakness')" class="form-control" id="weakness"
+    formControlName="weakness" />
   @if (heroesForm.get('weakness')?.invalid && heroesForm.get('weakness')?.touched) {
   <div class="form-error">
     La debilidad es obligatoria.
   </div>
   }
   <label for="enemy">Enemigo:</label>
-  <input [class.form-control--invalid]="isInvalid('enemy')" class="form-control mb-md" id="enemy" formControlName="enemy" />
+  <input [class.form-control--invalid]="isInvalid('enemy')" class="form-control mb-md" id="enemy"
+    formControlName="enemy" />
   @if (heroesForm.get('enemy')?.invalid && heroesForm.get('enemy')?.touched) {
   <div class="form-error">
     El nombre del archienemigo es obligatorio.
   </div>
   }
 
-  <app-button type="submit" size="full" variant="primary" [disabled]="heroesForm.invalid"> @if(variant() === 'edit'){Editar Superheroe} @else{Crear Superheroe}</app-button>
+  <app-button type="submit" size="full" variant="primary" [disabled]="heroesForm.invalid"> @if(variant() ===
+    'edit'){Editar Superheroe} @else{Crear Superheroe}</app-button>
 
 </form>

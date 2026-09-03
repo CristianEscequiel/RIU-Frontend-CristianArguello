@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
 import { Hero, HeroCreateRequest } from '../models/hero.model';
+import { SKIP_GLOBAL_LOADING } from '../../../core/http-context/http-context.tokens';
 
 @Injectable({
   providedIn: 'root',
@@ -26,6 +26,23 @@ export class HeroesService {
       }
     });
   }
+
+  existsByName(name: string, excludeId?: number): Observable<boolean> {
+    let params: Record<string, string> = {
+      name,
+    };
+    if (excludeId) {
+      params = {
+        ...params,
+        excludeId: String(excludeId),
+      };
+    }
+    return this._http.get<boolean>(`${this._apiUrl}/exists`, {
+      params,
+      context: new HttpContext().set(SKIP_GLOBAL_LOADING, true),
+    });
+  }
+
   create(hero: HeroCreateRequest): Observable<Hero> {
     return this._http.post<Hero>(this._apiUrl, hero);
   }

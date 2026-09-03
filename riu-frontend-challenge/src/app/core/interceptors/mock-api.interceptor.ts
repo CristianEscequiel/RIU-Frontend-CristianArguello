@@ -28,6 +28,27 @@ export const mockApiInterceptor: HttpInterceptorFn = (request, next) => {
     ).pipe(delay(API_DELAY));
   }
 
+  if (request.method === 'GET' && request.url === '/api/heroes/exists') {
+    const heroes: Hero[] = getHeroes();
+
+    const name = request.params.get('name')?.trim().toLowerCase();
+    const excludeIdParam = request.params.get('excludeId');
+    const excludeId = excludeIdParam ? Number(excludeIdParam) : null;
+
+    const exists = !!name && heroes.some(hero =>
+      hero.name.trim().toLowerCase() === name &&
+      hero.id !== excludeId
+    );
+
+    return of(
+      new HttpResponse({
+        status: 200,
+        body: exists,
+      })
+    ).pipe(delay(API_DELAY));
+  }
+
+
   const detailMatch = request.url.match(/^\/api\/heroes\/(\d+)$/);
 
   if (request.method === 'GET' && detailMatch) {
