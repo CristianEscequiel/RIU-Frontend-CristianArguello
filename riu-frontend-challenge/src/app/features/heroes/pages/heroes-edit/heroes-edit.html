@@ -6,6 +6,11 @@
     </app-button>
   </div>
   @if (hero(); as hero) {
-  <app-heroes-form variant='edit' [heroId]="hero.id" [inputData]="hero" (sendData)="onSubmitEdit($event)" />
+    <app-heroes-form
+      variant="edit"
+      [heroId]="hero.id"
+      [inputData]="hero"
+      (sendData)="onSubmitEdit($event)"
+    />
   }
 </section>
