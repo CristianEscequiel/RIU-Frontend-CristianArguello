@@ -15,6 +15,8 @@ La implementación fue realizada con Angular 21 LTS, aplicando prácticas de Ang
 - Reactive Forms
 - Signals
 - npm
+- ESLint y Prettier
+- Docker y Nginx
 
 No se utilizaron librerías externas de UI ni librerías de iconos.
 
@@ -25,7 +27,7 @@ Toda la interfaz fue construida utilizando componentes propios y un UI Kit SCSS 
 La aplicación permite:
 
 - Listar superhéroes.
-- Buscar héroes por nombre.
+- Búsqueda por nombre con debounceTime, distinctUntilChanged y switchMap.
 - Crear nuevos héroes.
 - Editar héroes existentes.
 - Eliminar héroes.
@@ -41,12 +43,16 @@ El proyecto está organizado de la siguiente manera:
 ```text
 src/app/
 ├── core/
+│   ├── http-context/
+│   ├── interceptors/
+│   └── services/
 ├── features/
 │   └── heroes/
 │       ├── components/
 │       ├── data-access/
 │       ├── models/
-│       └── pages/
+|       ├── pages/
+│       └── validator/
 │
 ├── layout/
 ├── pages/
@@ -58,13 +64,17 @@ src/app/
 Contiene elementos globales de la aplicación, principalmente:
 
 - Interceptores HTTP.
-- Servicios globales.
+- Contextos HTTP
+- Servicios globales de loading y mensajes.
 
-### Features
+### Feature Heroes
 
-Contiene las funcionalidades principales de la aplicación.
+Centraliza la lógica de gestión de superhéroes:
 
-La feature `heroes` concentra toda la lógica relacionada con la gestión de superhéroes y se encuentra separada en componentes, acceso a datos, modelos, páginas y rutas.
+- HeroesService: define el contrato HTTP para las operaciones CRUD.
+- mockApiInterceptor: simula una API REST y persiste los datos en localStorage.
+- HeroesForm: formulario reutilizable para creación y edición.
+- uniqueNameValidator: valida de forma asíncrona que no existan nombres duplicados.
 
 ### Layout
 
@@ -90,17 +100,16 @@ Aunque actualmente la aplicación no tiene un tamaño considerable, elegí utili
 
 ## Gestión de estado
 
-El estado interno de los componentes se resolvió utilizando Signals.
+El estado local de los componentes se gestiona mediante Signals.
 
-Para estados derivados se utilizó `computed()`.
+Los valores derivados, como páginas disponibles, cantidad total de páginas y héroes visibles, se calculan con computed().
 
-Un ejemplo es la paginación, donde a partir de la información disponible se calculan los datos necesarios para renderizar solamente los héroes correspondientes a la página actual.
-
-En los componentes con mayor interacción, como el listado y la edición de héroes, también se utilizó:
+Los componentes de mayor interacción y los componentes compartidos utilizan:
 
 ```ts
 ChangeDetectionStrategy.OnPush;
 ```
+La validación asíncrona del nombre utiliza un contexto HTTP para evitar mostrar el loading global ante cada pulsación del usuario.
 
 ## Persistencia de datos
 
@@ -192,33 +201,46 @@ El challenge no requería una implementación responsive, por lo que el foco est
 
 ## Testing
 
-Se implementaron tests unitarios priorizando las partes principales de la aplicación.
+Se implementaron tests unitarios priorizando las partes principales de la aplicación y los requerimientos funcionales del challenge.
 
 El alcance se centró especialmente en:
 
 - `HeroesService`
-  - Obtención de héroes.
+  - Obtención de todos los héroes.
+  - Obtención de un héroe por ID.
   - Búsqueda por nombre.
+  - Validación de existencia de nombre.
+  - Validación de existencia de nombre excluyendo un héroe por ID.
   - Creación.
   - Edición.
   - Eliminación.
-  - Manejo de casos donde el héroe no existe.
 
 - `HeroesList`
   - Carga inicial de datos.
   - Manejo de errores.
   - Paginación.
+  - Navegación entre páginas.
   - Búsqueda con `debounce`.
+  - Reinicio de paginación al realizar búsquedas.
   - Navegación hacia creación y edición.
-  - Eliminación mediante confirmación.
+  - Apertura del modal de confirmación.
+  - Eliminación de héroes.
+  - Manejo de errores durante la eliminación.
 
-En la ejecución final se completaron **33 tests distribuidos en 13 archivos**.
+En la ejecución final se completaron **46 tests distribuidos en 15 archivos**, todos finalizados correctamente.
 
-`HeroesService` cuenta con 7 tests y `HeroesList` con 15 tests, mientras que el resto de los componentes principales cuentan con smoke tests para validar su correcta creación.
+`HeroesService` cuenta con **9 tests** y alcanza **100% de coverage en statements, branches, functions y lines**.
 
-Ambos alcanzan 100% de coverage en statements, branches, functions y lines.
+`HeroesList` cuenta con **21 tests**. La lógica TypeScript de `heroes-list.ts` alcanza **100% de coverage en statements, branches, functions y lines**, mientras que el conjunto completo del componente, incluyendo su template, alcanza:
 
-De esta manera se cubre completamente la lógica del servicio encargado del CRUD y búsqueda de héroes, junto con el componente principal responsable del listado, búsqueda, paginación y acciones sobre los héroes.
+- **96.18%** en statements.
+- **93.33%** en branches.
+- **86.2%** en functions.
+- **100%** en lines.
+
+El resto de los componentes principales cuentan con smoke tests orientados a validar su correcta creación e integración básica.
+
+De esta manera se cubre completamente la lógica del servicio encargado del CRUD, búsqueda y validación de nombres, junto con la lógica principal del componente responsable del listado, búsqueda, paginación, navegación y eliminación de héroes.
 
 ## Docker
 
@@ -235,37 +257,79 @@ nginx
 try_files $uri $uri/ /index.html;
 
 ```
-
-Esto permite que las rutas internas de Angular funcionen correctamente al acceder directamente a URLs como /heroes/edit/:id, evitando errores 404 del servidor.
+Esto permite que las rutas internas de Angular funcionen correctamente al acceder directamente a URLs como /heroes/:id/edit/, evitando errores 404 del servidor.
 
 La aplicación se expone mediante el puerto 80 del contenedor.
 
-Construcción de la imagen
-
+Construcción de la imagen:
 ```bash
 docker build -t riu-frontend-challenge .
 ```
+Ejecutar el contenedor:
+```bash
+docker run --rm -p 8080:80 riu-frontend-challenge
+```
+La aplicación estará disponible en:
+```bash
+http://localhost:8080
+```
+## Requisitos previos
 
-## Ejecución
+- Node.js 22 o superior.
 
-Instalar las dependencias:
+- npm 10 o superior.
+
+- Docker opcional, para ejecutar la aplicación mediante contenedor.
+
+## Ejecución local
+
+Instalar dependencias:
 
 ```bash
-npm install
+npm ci
 ```
-
-Iniciar el proyecto:
+Iniciar la aplicación:
 
 ```bash
 npm start
 ```
 
-Realizar testing:
+La aplicación estará disponible en:
 
+```bash
+http://localhost:4200
+```
+Generar un build de producción:
+```bash
+npm run build
+```
+
+## Calidad de código
+
+Ejecutar ESLint:
+```bash
+npm run lint
+```
+
+Verificar formato:
+```bash
+npm run format:check
+```
+Formatear el proyecto:
+```bash
+npm run format
+```
+
+## Testing
+
+Ejecutar tests:
 ```bash
 npm test -- --watch=false
 ```
-
+Ejecutar tests con reporte de coverage:
+```bash
+npm test -- --watch=false --coverage
+```
 ## Uso de IA
 
 No se utilizó IA agéntica para desarrollar o modificar automáticamente el proyecto.

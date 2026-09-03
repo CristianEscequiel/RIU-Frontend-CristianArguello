@@ -31,7 +31,6 @@ export class HeroesList implements OnInit {
   private readonly _messageService = inject(MessageService);
   readonly heroes = signal<Hero[]>([]);
   readonly error = signal<string | null>(null);
-  readonly isModalOpen = signal<boolean>(false);
   readonly deleteModalOpen = signal(false);
   readonly searchControl = new FormControl('', { nonNullable: true });
   readonly heroIdToDelete = signal<number>(0);

@@ -13,7 +13,7 @@ describe('HeroesList', () => {
   let component: HeroesList;
   let fixture: ComponentFixture<HeroesList>;
 
-  const heroes: Hero[] = Array.from({ length: 20 }, (_, index) => ({
+  const heroes: Hero[] = Array.from({ length: 17 }, (_, index) => ({
     id: index + 1,
     name: `Hero ${index + 1}`,
     superpower: `Super poder número ${index + 1}`,
@@ -170,6 +170,38 @@ describe('HeroesList', () => {
     expect(routerMock.navigate).toHaveBeenCalledWith(['/heroes', 5, 'edit']);
   });
 
+  it('should call editHero with the selected hero id', () => {
+    component.heroes.set(heroes);
+
+    const editSpy = vi.spyOn(component, 'editHero');
+
+    fixture.detectChanges();
+
+    const buttons = fixture.debugElement.queryAll(By.css('app-button'));
+
+    const editButton = buttons.find(
+      (button) => button.nativeElement.textContent.trim() === 'Editar',
+    );
+
+    editButton?.triggerEventHandler('clicked');
+
+    expect(editSpy).toHaveBeenCalledWith(heroes[0].id);
+  });
+
+  it('should delete selected hero when modal confirms', () => {
+    const deleteSpy = vi.spyOn(component, 'deleteHero');
+
+    component.heroIdToDelete.set(5);
+
+    fixture.detectChanges();
+
+    const modal = fixture.debugElement.query(By.directive(Modal));
+
+    modal.triggerEventHandler('confirmed');
+
+    expect(deleteSpy).toHaveBeenCalledWith(5);
+  });
+
   it('should open delete confirmation modal for selected hero', () => {
     component.openDeleteModal(5);
 
@@ -189,6 +221,14 @@ describe('HeroesList', () => {
     );
 
     expect(loadHeroesSpy).toHaveBeenCalled();
+  });
+  it('should navigate to previous page if last hero of current page is deleted', () => {
+    component.heroes.set(heroes);
+    component.currentPage.set(3);
+
+    component.deleteHero(17);
+
+    expect(component.currentPage()).toBe(2);
   });
 
   it('should show error when deleting hero fails', () => {
@@ -217,5 +257,52 @@ describe('HeroesList', () => {
     const rows = fixture.nativeElement.querySelectorAll('tbody tr');
 
     expect(rows.length).toBe(8);
+  });
+
+  it('should render the alert when there is an error loading heroes', () => {
+    heroesServiceMock.getAll.mockReturnValue(throwError(() => new Error('Load error')));
+
+    component.loadHeroes();
+
+    fixture.detectChanges();
+
+    const alert = fixture.nativeElement.querySelector('.alert');
+
+    expect(alert).toBeTruthy();
+    expect(alert.textContent).toContain('No se pudieron cargar a los héroes.');
+  });
+
+  it('should render the alert when heroes list is empty', () => {
+    heroesServiceMock.getAll.mockReturnValue(of([]));
+
+    component.loadHeroes();
+
+    fixture.detectChanges();
+
+    const alert = fixture.nativeElement.querySelector('app-alert');
+
+    expect(alert).toBeTruthy();
+    expect(alert.textContent).toContain(
+      'El superhéroe que busca no se encuentra registrado. ¡O peor aún! No hay superhéroes en este mundo!',
+    );
+  });
+  it('should navigate using pagination buttons', () => {
+    component.heroes.set(heroes);
+    component.currentPage.set(2);
+
+    const goToPageSpy = vi.spyOn(component, 'goToPage');
+
+    fixture.detectChanges();
+
+    const buttons = fixture.nativeElement.querySelectorAll('.pagination__item');
+
+    buttons[0].click();
+    expect(goToPageSpy).toHaveBeenCalledWith(1);
+
+    buttons[2].click();
+    expect(goToPageSpy).toHaveBeenCalledWith(2);
+
+    buttons[buttons.length - 1].click();
+    expect(goToPageSpy).toHaveBeenCalledWith(3);
   });
 });

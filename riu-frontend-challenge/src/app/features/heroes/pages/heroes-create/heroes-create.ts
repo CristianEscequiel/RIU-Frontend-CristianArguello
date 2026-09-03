@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { HeroesForm } from '../../components/heroes-form/heroes-form';
 import { Button } from '../../../../shared/components/button/button';
 import { HeroesService } from '../../data-access/heroes.service';
@@ -10,6 +10,7 @@ import { HeroCreateRequest } from '../../models/hero.model';
   selector: 'app-heroes-create',
   imports: [HeroesForm, Button],
   templateUrl: './heroes-create.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeroesCreate {
   private readonly _heroesService = inject(HeroesService);

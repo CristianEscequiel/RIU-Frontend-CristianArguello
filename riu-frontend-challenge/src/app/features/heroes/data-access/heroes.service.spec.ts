@@ -125,4 +125,37 @@ describe('HeroesService', () => {
       statusText: 'No Content',
     });
   });
+  it('should check if hero name exists', () => {
+    service.existsByName('Superman').subscribe((response) => {
+      expect(response).toBe(true);
+    });
+
+    const request = httpTesting.expectOne(
+      (req) =>
+        req.url === '/api/heroes/exists' &&
+        req.params.get('name') === 'Superman' &&
+        !req.params.has('excludeId'),
+    );
+
+    expect(request.request.method).toBe('GET');
+
+    request.flush(true);
+  });
+
+  it('should check if hero name exists excluding current hero id', () => {
+    service.existsByName('Superman', 5).subscribe((response) => {
+      expect(response).toBe(false);
+    });
+
+    const request = httpTesting.expectOne(
+      (req) =>
+        req.url === '/api/heroes/exists' &&
+        req.params.get('name') === 'Superman' &&
+        req.params.get('excludeId') === '5',
+    );
+
+    expect(request.request.method).toBe('GET');
+
+    request.flush(false);
+  });
 });
